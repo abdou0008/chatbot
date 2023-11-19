@@ -39,4 +39,7 @@ public class Utilisateur implements Serializable {
 
     @ManyToMany(mappedBy = "utilisateur")
     private Set<Recommandation> recommandations = new HashSet<>();
+
+    @ManyToMany(mappedBy = "utilisateur")
+    private Set<AppRole> appRoles = new HashSet<>();
 }

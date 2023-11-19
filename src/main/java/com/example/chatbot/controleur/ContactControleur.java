@@ -1,48 +1,54 @@
 package com.example.chatbot.controleur;
 
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.chatbot.dao.ContactRepository;
 import com.example.chatbot.entities.Contact;
+import com.example.chatbot.services.ContactService;
 
 import java.util.List;
 
 
-@Controller
-@AllArgsConstructor
+@RestController
+@RequestMapping("/api/contacts")
 public class ContactControleur {
 
-    private ContactRepository contactRepository;
+    @Autowired
+    private ContactService contactService;
 
-    
-    @GetMapping("/contact")
-    @ResponseBody
-    public List<Contact> listContacts(){
-        return contactRepository.findAll();
-
+    @GetMapping("/{contactId}")
+    public ResponseEntity<Contact> getContactById(@PathVariable Long contactId) {
+        Contact contact = contactService.findById(contactId);
+        return ResponseEntity.ok().body(contact);
     }
 
-    @GetMapping("/delete")
-    public String delete(Long id){
-        contactRepository.deleteById(id);;
-        return "redirect:/contact";
+    @GetMapping
+    public ResponseEntity<List<Contact>> getAllContacts() {
+        List<Contact> contacts = contactService.findAll();
+        return ResponseEntity.ok().body(contacts);
+    }
 
+    @PostMapping
+    public ResponseEntity<Contact> createContact(@RequestBody Contact contact) {
+        Contact createdContact = contactService.saveContact(contact);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdContact);
     }
-    @GetMapping("/formContact")
-    public String formContact(Model model){
-        model.addAttribute("contact", new Contact());
-        return "categorieTemplate/formCategorie";
+
+    @PutMapping("/{contactId}")
+    public ResponseEntity<Contact> updateContact(@PathVariable Long contactId, @RequestBody Contact contactDetails) {
+        Contact updateContact = contactService.updateContact(contactId, contactDetails);
+        if (updateContact != null) {
+            return ResponseEntity.ok().body(updateContact);
+        }
+        return ResponseEntity.notFound().build();
     }
-    @PostMapping(path = "/save")
-    public Contact save(Contact contact){
-        return contactRepository.save(contact); 
+
+    @DeleteMapping("/{contactId}")
+    public ResponseEntity<Void> deleteContact(@PathVariable Long contactId) {
+        contactService.deleteContact(contactId);
+        return ResponseEntity.noContent().build();
     }
-    // @GetMapping("/admin/editContact")
-    // public String editContact(Long id){
-    //     Contact contact=contactRepository.findById(id);
-    //     return conatct;
-    // }
 }
