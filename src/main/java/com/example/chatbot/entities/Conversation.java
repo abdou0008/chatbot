@@ -14,7 +14,7 @@ import com.example.chatbot.sec.entities.Utilisateur;
 public class Conversation implements Serializable {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idConversation;
-    private String nomConvesation;
+    private String nomConversation;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Utilisateur utilisateur;
