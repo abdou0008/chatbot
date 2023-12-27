@@ -52,4 +52,18 @@ public class UtilisateurControleur {
         utilisateurService.deleteUtilisateur(userId);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/login/{emailU},{password}")
+    public ResponseEntity<String> authenticateUser(@RequestBody Utilisateur utilisateur) {
+        String emailUser = utilisateur.getEmailUser();
+        String password = utilisateur.getPassword();
+
+        // Vérification de l'authentification à l'aide du service d'utilisateur (c'est un exemple, vous devez implémenter votre logique d'authentification)
+        boolean isAuthenticated = utilisateurService.authenticate(emailUser, password);
+        if (isAuthenticated) {
+            return ResponseEntity.ok().body("Utilisateur authentifié avec succès !");
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Nom d'utilisateur ou mot de passe incorrect !");
+        }
+    }
 }

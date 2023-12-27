@@ -11,4 +11,5 @@ public interface UtilisateurService {
     Utilisateur saveUtilisateur(Utilisateur utilisateur);
     Utilisateur updateUtilisateur(Long userId, Utilisateur utilisateurDetails);
     void deleteUtilisateur(Long userId);
+    boolean authenticate(String emailUser, String password);
 }

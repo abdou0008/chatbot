@@ -18,6 +18,7 @@ public class Contact implements Serializable {
     private String emailContact;
     private String telephoneContact;
     private String adresseContact;
+    private String specialite;
 
     @ManyToMany(mappedBy = "contacts")
     private Set<Response> responses = new HashSet<>();
